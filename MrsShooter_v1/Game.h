@@ -8,10 +8,13 @@
 #include <SDL.h>
 #include<SDL_image.h>
 #include "Lists.h"
-#include "Entities.h"
+//#include "Entities.h"
 #include "Screen.h"
 #include "collision.h"
+
 #include "Tile.h"
+#include "Hero.h"
+#include "Enemy.h"
 
 using namespace std;
 using namespace HeroClass;

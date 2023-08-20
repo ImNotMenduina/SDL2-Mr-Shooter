@@ -5,12 +5,11 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "Hero.h"
-#include "Tile.h"
 
-using namespace TILES;
 using namespace BulletClass;
 using namespace EnemyClass;
 using namespace HeroClass;
+using namespace std;
 
 // LIST OF BULLETS
 //
@@ -66,7 +65,6 @@ LISTEnemies* createListOfEnemies();
 void freeEnemies(LISTEnemies* lst);
 void insertEnemies(LISTEnemies* lst, SDL_Renderer* renderer, int posx, int posy);
 void printEnemies(LISTEnemies* lst, LISTBullets* bulletsList, SDL_Renderer* renderer, Hero* hero);
-void collisionEnemyTile(LISTEnemies* lst, std::vector<Tile>& tiles);
 
 void freeAll(LISTBullets* lstBullets, LISTEnemies* lstEnemies);
 //int distance(int x1, int y1, int x2, int y2);

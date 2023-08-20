@@ -11,7 +11,6 @@ using namespace EnemyClass;
 		this->posy = posy;
 		this->life = 100;
 		this->directionFace = 0;
-		this->isShooting = false;
 		initFrames(renderer);
 		ActionArea(this->enemyBox);
 	}
@@ -49,16 +48,6 @@ using namespace EnemyClass;
 	int Enemy::getLife()
 	{
 		return this->life;
-	}
-
-	bool Enemy::getIsShooting()
-	{
-		return this->isShooting;
-	}
-
-	void Enemy::setIsShooting(bool shooting)
-	{
-		this->isShooting = shooting;
 	}
 
 	void Enemy::setDirectionFace(int direction)

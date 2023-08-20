@@ -1,7 +1,5 @@
 #include "collision.h"
 
-using namespace HeroClass;
-
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
 	int leftA, leftB;
@@ -61,6 +59,42 @@ void collisionHeroAgainstEnemy(Hero* hero, LISTEnemies* list)
 			hero->setLife(hero->getLife() - 5); 
 		}
 		aux = aux->proximo;
+	}
+}
+
+void collisionEnemyTile(LISTEnemies* lst, std::vector<Tile>& tiles)
+{
+	_ONE_ENEMY* aux = lst->inicio;
+	bool collision = false;
+	int i = 0;
+	if (aux != NULL)
+	{
+		while (aux != NULL)
+		{
+			collision = false;
+			while (i < tiles.size() && !checkCollision(aux->enemy->getEnemyBox(), tiles[i].getTileBox()))
+			{
+				i++;
+			}
+
+			if (i < tiles.size())
+			{
+				collision = true;
+			}
+
+			if (collision)
+			{
+				aux->enemy->setPositionY(tiles[i].getPosY() - aux->enemy->getEnemyBox().h); //***
+				aux->enemy->setOnTheFloor(true);
+			}
+			else
+			{
+				aux->enemy->setOnTheFloor(false);
+			}
+
+			i = 0;
+			aux = aux->proximo;
+		}
 	}
 }
 

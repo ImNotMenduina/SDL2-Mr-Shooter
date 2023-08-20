@@ -297,13 +297,36 @@ void collisionEnemyTile(LISTEnemies* lst, std::vector<Tile>& tiles)
 	}
 }
 
-
-/////
-/*
-int distance(int x1, int y1, int x2, int y2)
+void freeAll(LISTBullets* lstBullets, LISTEnemies* lstEnemies)
 {
-	int deltax = (x1 - x2) * (x1 - x2);
-	int deltay = (y1 - y2) * (y1 - y2);
-	return (deltax - deltay);
+	if(lstBullets != NULL)
+	{
+		if (lstBullets->inicio != NULL)
+		{
+			_ONE_BULLET* aux = lstBullets->inicio;
+			_ONE_BULLET* memDelete = NULL;
+			while (aux != NULL)
+			{
+				memDelete = aux;
+				aux = aux->proximo;
+				memDelete->bullet->~Bullet();
+				//std::cout << "bullet OUT ! \n";
+			}
+		}
+	}
+	if(lstEnemies != NULL)
+	{
+		if (lstEnemies->inicio != NULL)
+		{
+			_ONE_ENEMY* aux = lstEnemies->inicio;
+			_ONE_ENEMY* memDelete = NULL;
+			while (aux != NULL)
+			{
+				memDelete = aux;
+				aux = aux->proximo;
+				memDelete->enemy->~Enemy();
+				//std::cout << "enemy OUT ! \n";
+			}
+		}
+	}
 }
-*/

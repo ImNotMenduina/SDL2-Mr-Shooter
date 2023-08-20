@@ -29,6 +29,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -41,6 +42,7 @@
     <ClInclude Include="SDLheader.h" />
     <ClInclude Include="structus.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

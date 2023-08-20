@@ -53,7 +53,6 @@ int main(int argv, char* argc[])
 
 	std::vector<Tile> chao;
 
-
 	for (int x = 0; x < 40; x++)
 	{
 		
@@ -89,7 +88,7 @@ int main(int argv, char* argc[])
 
 	Hero* hero = new Hero(200, 200, renderer);
 
-	LISTBullets* lst = createList();
+	LISTBullets* lstBullets = createList();
 	LISTEnemies* lstEnemies = createListOfEnemies();
 
 	insertEnemies(lstEnemies, renderer, 400, 200);
@@ -103,6 +102,10 @@ int main(int argv, char* argc[])
 	SDL_Texture* background1 = loadTexture(renderer, "maps/nuvens_1.png", NULL, NULL);
 	SDL_Texture* background = loadTexture(renderer, "maps/mapback.png", NULL, NULL);
 	SDL_Texture* mato = loadTexture(renderer, "maps/mato.png", NULL, NULL);
+
+	Timer time = Timer();
+	time.Start();
+	std::cout << "timer was started at: " << time.getTicks();
 
 	while(isRunning)
 	{
@@ -121,7 +124,6 @@ int main(int argv, char* argc[])
 			insertEnemies(lstEnemies, renderer, rand() % 600 + 1, rand() % 400 + 1);
 			std::cout << lstEnemies->size;
 		}
-		
 
 		SDL_Event events;
 
@@ -129,6 +131,8 @@ int main(int argv, char* argc[])
 		{
 			if (events.type == SDL_QUIT)
 			{
+				std::cout << "timer was FINISHED at: " << time.getTicks();
+				time.Stop();
 				isRunning = false;
 			}
 
@@ -159,15 +163,16 @@ int main(int argv, char* argc[])
 					//std::cout << "f";
 					keystates[4] = true;
 					if(hero->getDirection() == 1)
-						insertBullet(lst, renderer, hero->getDirection(), hero->getPositionX() + 30 * 2, hero->getPositionY() + 8 * 2);
+						insertBullet(lstBullets, renderer, hero->getDirection(), hero->getPositionX() + 30 * 2, hero->getPositionY() + 8 * 2);
 					else
-						insertBullet(lst, renderer, hero->getDirection(), hero->getPositionX(), hero->getPositionY() + 8 * 2);
+						insertBullet(lstBullets, renderer, hero->getDirection(), hero->getPositionX(), hero->getPositionY() + 8 * 2);
 				}
 				if (events.key.keysym.sym == SDLK_SPACE)
 				{
 					//std::cout << "SPACE";
 					keystates[5] = true;
 				}
+				
 			}
 			if (events.type == SDL_KEYUP)
 			{
@@ -208,22 +213,22 @@ int main(int argv, char* argc[])
 		if (lstEnemies->size > 0)
 		{
 			collisionEnemyTile(lstEnemies, chao);
-			printEnemies(lstEnemies, lst, renderer, hero);
+			printEnemies(lstEnemies, lstBullets, renderer, hero);
 			freeEnemies(lstEnemies);
 			collisionHeroAgainstEnemy(hero, lstEnemies);
 		}
 
 		
-		if (lst->size > 0)
+		if (lstBullets->size > 0)
 		{
-			printBullet(lst, renderer);
-			freeBullet(lst);
+			printBullet(lstBullets, renderer);
+			freeBullet(lstBullets);
 		}
 		
 
-		if (lstEnemies->size > 0 && lst->size > 0)
+		if (lstEnemies->size > 0 && lstBullets->size > 0)
 		{
-			collisionBulletAgainstEnemy(lst, lstEnemies);
+			collisionBulletAgainstEnemy(lstBullets, lstEnemies);
 		}
 	
 		
@@ -278,8 +283,8 @@ int main(int argv, char* argc[])
 
 		SDL_RenderPresent(renderer);	
 	}
-
 	hero->~Hero();
+	freeAll(lstBullets, lstEnemies);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 

@@ -13,12 +13,16 @@
 #include "collision.h"
 
 #include "Tile.h"
+#include "Timer.h"
 #include "Hero.h"
 #include "Enemy.h"
 
 using namespace std;
+using namespace TimerClass;
 using namespace HeroClass;
 using namespace EnemyClass;
 using namespace TILES;
+
+void close();
 
 #endif

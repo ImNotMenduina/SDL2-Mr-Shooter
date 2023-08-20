@@ -41,6 +41,9 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Arquivos de Recurso</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structus.h">
@@ -71,6 +74,9 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

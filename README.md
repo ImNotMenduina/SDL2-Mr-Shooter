@@ -31,7 +31,7 @@
  <p>This is the most important topic of the README. What I mean is how to determine the best data structure to store all the enemies and bullets. I've chosen Lists for this purpose. However, this isn't the most challenging part. Here, I've employed two different logics.</p>
 <p>1. When the hero is shooting, some bullets are created somewhere in the heap. However, when a bullet collides with an object or goes out of the visible screen, we need to free the chunk of memory that the bullet is occupying.</p>
 <p>2. When an enemy dies, we also need to release the corresponding memory chunk, following the same logic as with bullets.</p>
-<p>That's why I've developed 'free()' functions for both scenarios:</p>
+<p>That's why I've created 'free()' functions for both situations. Here's an example:</p>
 
 <pre>
 <h2>(Free)Bullets Code:</h2>
@@ -54,20 +54,18 @@ void freeBullet(LISTBullets* lst)
 			if (check == lst->begin)
 			{
 				lst->begin = aux;
-				lst->size--;
 			}
 			else if (check->next == NULL)
 			{
 				check->prev->next = NULL;
-				lst->size--;
 			}
 			else
 			{
 				check->prev->next = check->next;
 				check->next>prev = check->prev;
-				lst->size--;
 			}
 			free(check);
+			lst->size--;
 		}
 	}
 }

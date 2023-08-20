@@ -32,3 +32,57 @@
 <p>1. When the hero is shooting, some bullets are created somewhere in the heap. However, when a bullet collides with an object or goes out of the visible screen, we need to free the chunk of memory that the bullet is occupying.</p>
 <p>2. When an enemy dies, we also need to release the corresponding memory chunk, following the same logic as with bullets.</p>
 <p>That's why I've developed 'free()' functions for both scenarios:</p>
+
+####
+<pre>
+    <div class="container">
+        <div class="block two first">
+            <h2>Your title</h2>
+            <div class="wrap">
+            void freeBullet(LISTBullets* lst)
+{
+	if (lst->inicio == NULL)
+		exit(0);
+
+	_ONE_BULLET* aux = lst->inicio;
+	_ONE_BULLET* check = NULL;
+
+	while (aux != NULL)
+	{
+		check = aux;
+		aux = aux->proximo;
+
+		if (check->bullet->getLife() < 1)
+		{
+			if (check == lst->inicio)
+			{
+				lst->inicio = aux;
+				lst->size--;
+
+				//std::cout << "FREELOU BEGIN ###1\n";
+			}
+			else if (check->proximo == NULL)
+			{
+				check->anterior->proximo = NULL;
+				lst->size--;
+
+				//std::cout << "FREELOU FINAL ###2\n";
+			}
+			else
+			{
+				check->anterior->proximo = check->proximo;
+				check->proximo->anterior = check->anterior;
+				lst->size--;
+
+				//std::cout << "FREELOU MIDDLE ###3\n";
+			}
+			free(check);
+		}
+	}
+}
+            </div>
+        </div>
+    </div>
+</pre>
+
+####

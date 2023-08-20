@@ -1,5 +1,5 @@
 #include "Tile.h"
-using namespace TILES;
+using namespace TileClass;
 
 Tile::Tile(int posx, int posy, SDL_Renderer* renderer)
 {

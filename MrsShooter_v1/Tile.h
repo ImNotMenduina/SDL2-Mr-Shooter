@@ -3,7 +3,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "texture.h"
-namespace TILES
+namespace TileClass
 {
 	class Tile 
 	{

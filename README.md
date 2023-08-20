@@ -33,56 +33,42 @@
 <p>2. When an enemy dies, we also need to release the corresponding memory chunk, following the same logic as with bullets.</p>
 <p>That's why I've developed 'free()' functions for both scenarios:</p>
 
-####
 <pre>
-    <div class="container">
-        <div class="block two first">
-            <h2>Your title</h2>
-            <div class="wrap">
-            void freeBullet(LISTBullets* lst)
+<h2>(Free)Bullets Code:</h2>
+      
+void freeBullet(LISTBullets* lst)
 {
-	if (lst->inicio == NULL)
-		exit(0);
+ 	if (lst->begin == NULL)
+		exit(0); // can't free an empty list.
 
-	_ONE_BULLET* aux = lst->inicio;
+	_ONE_BULLET* aux = lst->begin;
 	_ONE_BULLET* check = NULL;
 
 	while (aux != NULL)
 	{
 		check = aux;
-		aux = aux->proximo;
+		aux = aux->next;
 
-		if (check->bullet->getLife() < 1)
+		if (check->bullet->getLife() < 1) // If the life of this bullet reaches zero, then we can deallocate that memory
 		{
-			if (check == lst->inicio)
+			if (check == lst->begin)
 			{
-				lst->inicio = aux;
+				lst->begin = aux;
 				lst->size--;
-
-				//std::cout << "FREELOU BEGIN ###1\n";
 			}
-			else if (check->proximo == NULL)
+			else if (check->next == NULL)
 			{
-				check->anterior->proximo = NULL;
+				check->prev->next = NULL;
 				lst->size--;
-
-				//std::cout << "FREELOU FINAL ###2\n";
 			}
 			else
 			{
-				check->anterior->proximo = check->proximo;
-				check->proximo->anterior = check->anterior;
+				check->prev->next = check->next;
+				check->next>prev = check->prev;
 				lst->size--;
-
-				//std::cout << "FREELOU MIDDLE ###3\n";
 			}
 			free(check);
 		}
 	}
 }
-            </div>
-        </div>
-    </div>
 </pre>
-
-####

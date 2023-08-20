@@ -7,11 +7,11 @@
 //#include<string>
 #include <SDL.h>
 #include<SDL_image.h>
+#include <vector>
+
 #include "Lists.h"
-//#include "Entities.h"
 #include "Screen.h"
 #include "collision.h"
-
 #include "Tile.h"
 #include "Timer.h"
 #include "Hero.h"

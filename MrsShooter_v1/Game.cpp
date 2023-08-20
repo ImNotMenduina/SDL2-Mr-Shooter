@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include <vector>
-
 int main(int argv, char* argc[])
 {
 	//SDL WINDOW

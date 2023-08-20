@@ -19,10 +19,8 @@
 
 using namespace std;
 using namespace TimerClass;
+using namespace TileClass;
 using namespace HeroClass;
 using namespace EnemyClass;
-using namespace TILES;
-
-void close();
 
 #endif

@@ -26,12 +26,6 @@
     <ClCompile Include="Collisions.cpp">
       <Filter>Arquivos de Recurso</Filter>
     </ClCompile>
-    <ClCompile Include="bulletList.cpp">
-      <Filter>Arquivos de Recurso</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Arquivos de Recurso</Filter>
-    </ClCompile>
     <ClCompile Include="Lists.cpp">
       <Filter>Arquivos de Recurso</Filter>
     </ClCompile>
@@ -42,7 +36,7 @@
       <Filter>Arquivos de Recurso</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Arquivos de Cabeçalho</Filter>
+      <Filter>Arquivos de Recurso</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

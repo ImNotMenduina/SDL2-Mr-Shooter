@@ -206,7 +206,7 @@ int main(int argv, char* argc[])
 				}
 			}
 		}
-		SDL_Delay(50);
+		SDL_Delay(100);
 
 		if (lstEnemies->size > 0)
 		{

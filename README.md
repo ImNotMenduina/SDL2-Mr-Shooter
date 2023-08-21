@@ -26,3 +26,47 @@
  <div align="center">
    <img src="https://github.com/ImNotMenduina/SDL2-Mr-Shooter/assets/100011745/c00457d6-7610-4b49-b16b-a0d85993c4b2">
  </div>
+
+ <h1>Bullets and Enemies allocation</h1>
+ <p>This is the most important topic of the README. What I mean is how to determine the best data structure to store all the enemies and bullets. I've chosen Lists for this purpose. However, this isn't the most challenging part. Here, I've employed two different logics.</p>
+<p>1. When the hero is shooting, some bullets are created somewhere in the heap. However, when a bullet collides with an object or goes out of the visible screen, we need to free the chunk of memory that the bullet is occupying.</p>
+<p>2. When an enemy dies, we also need to release the corresponding memory chunk, following the same logic as with bullets.</p>
+<p>That's why I've created 'free()' functions for both situations. Here's an example:</p>
+
+<pre>
+<h2>(Free)Bullets Code:</h2>
+      
+void freeBullet(LISTBullets* lst)
+{
+ 	if (lst->begin == NULL)
+		exit(0); // can't free an empty list.
+
+	_ONE_BULLET* aux = lst->begin;
+	_ONE_BULLET* check = NULL;
+
+	while (aux != NULL)
+	{
+		check = aux;
+		aux = aux->next;
+
+		if (check->bullet->getLife() < 1) // If the life of this bullet reaches zero, then we can deallocate that memory
+		{
+			if (check == lst->begin)
+			{
+				lst->begin = aux;
+			}
+			else if (check->next == NULL)
+			{
+				check->prev->next = NULL;
+			}
+			else
+			{
+				check->prev->next = check->next;
+				check->next>prev = check->prev;
+			}
+			free(check);
+			lst->size--;
+		}
+	}
+}
+</pre>

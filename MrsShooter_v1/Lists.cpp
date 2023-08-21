@@ -219,29 +219,19 @@ void printEnemies(LISTEnemies* lst, LISTBullets* bulletsList, SDL_Renderer* rend
 			{
 				if(checkCollision(aux->enemy->getActionArea(), hero->getHeroBox()))
 				{
-					aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY());
-					aux->enemy->RUN_moviment(renderer);
+					aux->enemy->setIsChasing(true);
+					//aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
 				}
-				else if(checkCollision(aux->enemy->getActionAreaShoot(), hero->getHeroBox()))
-				{
-					if (hero->getPositionX() > aux->enemy->getPositionX())
-					{
-						aux->enemy->setDirectionFace(1);
-						insertBullet(bulletsList, renderer, aux->enemy->getDirectionFace(), aux->enemy->getPositionX() + (aux->enemy->getEnemyBox().w / 2) + 40, aux->enemy->getPositionY() + (aux->enemy->getEnemyBox().h / 2) - 15);
-					}
-					else
-					{
-						aux->enemy->setDirectionFace(-1);
-						insertBullet(bulletsList, renderer, aux->enemy->getDirectionFace(), aux->enemy->getPositionX() + (aux->enemy->getEnemyBox().w / 2) - 60, aux->enemy->getPositionY() + (aux->enemy->getEnemyBox().h / 2) - 20);
-					}
-					aux->enemy->SHOOT_moviment(renderer);
-				}
+				
 				else
 				{
-					aux->enemy->IDLE_moviment(renderer);
+					aux->enemy->setIsChasing(false);
 					aux->enemy->setPositionY(aux->enemy->getPositionY() + ENEMY_GRAVITY);
+					//aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
 				}
+				aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
 				aux->enemy->ActionArea(aux->enemy->getEnemyBox());
+
 				//ACTION BOX
 				//SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 				//SDL_Rect rect = aux->enemy->getActionArea();

@@ -2,10 +2,13 @@
 #define Enemy_H
 #define ENEMY_SPEED 2
 #define ENEMY_GRAVITY 3
-#include "structus.h"
-#include "Hero.h"
+
 #include<SDL_image.h>
-#include <fstream>
+#include "texture.h"
+#include "Timer.h"
+#include "structus.h"
+
+using namespace TimerClass;
 
 namespace EnemyClass
 {
@@ -17,9 +20,11 @@ namespace EnemyClass
 		SPEED enemyVelocity;
 
 		//game stats
+		bool isChasing;
 		int life;
 
 		//sprites logics
+		int relaxMoviments;
 		int directionFace;
 		int spriteState[4];
 		bool isShooting;
@@ -30,6 +35,9 @@ namespace EnemyClass
 		SDL_Rect enemyBox;
 		SDL_Rect actionArea;
 		SDL_Rect actionShootArea;
+
+		//enemy timers
+		Timer walkingTimer;
 	public:
 		Enemy(int posx, int posy, SDL_Renderer* renderer);
 		~Enemy();
@@ -49,6 +57,7 @@ namespace EnemyClass
 		int getDirectionFace();
 
 		//enemy hit boxes
+		void setIsChasing(bool isChasing);
 		SDL_Rect getEnemyBox();
 		SDL_Rect getActionArea();
 		SDL_Rect getActionAreaShoot();
@@ -61,7 +70,7 @@ namespace EnemyClass
 		void RUN_moviment(SDL_Renderer* renderer);
 		void SHOOT_moviment(SDL_Renderer* renderer);
 		void DEAD_moviment(SDL_Renderer* renderer);
-		void MOVIMENTS_enemy(int heroPosx, int heroPosy);
+		void MOVIMENTS_enemy(int heroPosx, int heroPosy, SDL_Renderer* renderer);
 		void ActionArea(SDL_Rect actionArea);
 
 		//enemy is on the floor

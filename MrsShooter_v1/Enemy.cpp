@@ -4,15 +4,18 @@ using namespace EnemyClass;
 
 	Enemy::Enemy(int posx, int posy, SDL_Renderer* renderer)
 	{
-		enemyVelocity.speedx = 0;
-		enemyVelocity.speedy = 0;
+		this->walkingTimer = Timer();
+		this->enemyVelocity.speedx = 0;
+		this->enemyVelocity.speedy = 0;
+		this->relaxMoviments = rand() % 3 + 1; 
+		this->isChasing = false;
 		this->onTheFloor = false;
 		this->posx = posx;
 		this->posy = posy;
 		this->life = 100;
 		this->directionFace = 0;
-		initFrames(renderer);
-		ActionArea(this->enemyBox);
+		this->initFrames(renderer);
+		this->ActionArea(this->enemyBox);
 	}
 
 	Enemy::~Enemy()
@@ -83,6 +86,11 @@ using namespace EnemyClass;
 	void Enemy::setOnTheFloor(bool onTheFloor)
 	{
 		this->onTheFloor = onTheFloor;
+	}
+
+	void Enemy::setIsChasing(bool isChasing)
+	{
+		this->isChasing = isChasing;
 	}
 
 	void Enemy::initFrames(SDL_Renderer* renderer)
@@ -256,19 +264,22 @@ using namespace EnemyClass;
 	
 
 
-	void Enemy::MOVIMENTS_enemy(int heroPosx, int heroPosy)
+	void Enemy::MOVIMENTS_enemy(int heroPosx, int heroPosy, SDL_Renderer* renderer)
 	{
+		if(this->isChasing)
+		{
 			// x axis
 			if (heroPosx < this->posx)
 			{
 				this->enemyVelocity.speedx = ENEMY_SPEED;
 				this->enemyVelocity.speedy = ENEMY_GRAVITY;
-				
+
 				this->posx -= enemyVelocity.speedx;
 				this->posy += this->enemyVelocity.speedy;
-				this->directionFace = 1;	
+				this->directionFace = 1;
+				this->RUN_moviment(renderer);
 			}
-			if (heroPosx > this->posx)
+			else if (heroPosx > this->posx)
 			{
 				this->enemyVelocity.speedx = ENEMY_SPEED;
 				this->enemyVelocity.speedy = ENEMY_GRAVITY;
@@ -277,7 +288,74 @@ using namespace EnemyClass;
 				this->posy += this->enemyVelocity.speedy;
 
 				this->directionFace = 2;
+				this->RUN_moviment(renderer);
 			}
+		}
+		else if(!this->isChasing)// 3 seconds
+		{
+			if (!this->walkingTimer.checkIsStarted())
+			{
+				this->walkingTimer.Start();
+			}
+
+			double timer = (this->walkingTimer.getTicks() / (1000 * 1.0));
+
+			if(this->relaxMoviments == 0)
+			{
+				if(timer <= 3.0)
+				{
+					this->enemyVelocity.speedx = ENEMY_SPEED;
+					this->enemyVelocity.speedy = ENEMY_GRAVITY;
+
+					this->posx += this->enemyVelocity.speedx;
+					this->posy += this->enemyVelocity.speedy;
+					this->directionFace = 2;
+					this->RUN_moviment(renderer);
+				}
+				else
+				{
+					this->walkingTimer.Stop();
+					this->relaxMoviments++;
+					this->IDLE_moviment(renderer);
+				}
+			}
+			else if (this->relaxMoviments == 1 || this->relaxMoviments == 3)
+			{
+				if(timer <= 3.0)
+				{
+					IDLE_moviment(renderer);
+				}
+				else
+				{
+					this->walkingTimer.Stop();
+					this->relaxMoviments++;
+					this->RUN_moviment(renderer);
+				}
+			}
+			else if (this->relaxMoviments == 2)
+			{
+				if(timer <= 3.0)
+				{
+					this->enemyVelocity.speedx = ENEMY_SPEED;
+					this->enemyVelocity.speedy = ENEMY_GRAVITY;
+
+					this->posx -= this->enemyVelocity.speedx;
+					this->posy += this->enemyVelocity.speedy;
+					this->directionFace = 1;
+					this->RUN_moviment(renderer);
+				}
+				else
+				{
+					this->walkingTimer.Stop();
+					this->relaxMoviments++;
+					this->setDirectionFace(2);
+					IDLE_moviment(renderer);
+
+				}
+			}
+		}
+		if (this->relaxMoviments > 3)
+			this->relaxMoviments = 0;	
 	}
 	
 

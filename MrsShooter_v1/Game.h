@@ -23,4 +23,7 @@ using namespace TileClass;
 using namespace HeroClass;
 using namespace EnemyClass;
 
+const int SCREEN_FPS = 20;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
 #endif

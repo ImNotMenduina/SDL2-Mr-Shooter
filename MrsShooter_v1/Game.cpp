@@ -101,12 +101,25 @@ int main(int argv, char* argc[])
 	SDL_Texture* background = loadTexture(renderer, "maps/mapback.png", NULL, NULL);
 	SDL_Texture* mato = loadTexture(renderer, "maps/mato.png", NULL, NULL);
 
-	Timer time = Timer();
-	time.Start();
-	std::cout << "timer was started at: " << time.getTicks();
+	Timer fpsTimer = Timer();
+	Timer capTimer = Timer();
+
+	int countedFrames = 0;
+	double avgFrames = 0.0;
+	fpsTimer.Start();
 
 	while(isRunning)
 	{
+		capTimer.Start();
+
+		double timerDebug = (fpsTimer.getTicks() / 1000 * 1.0);
+		avgFrames = countedFrames / (fpsTimer.getTicks() / 1000 * 1.0);
+		if (avgFrames > 2000000)
+		{
+			avgFrames = 0;
+		}
+
+		//std::cout << avgFrames << "\n";
 		//DEFAULT (IDLE)
 		SDL_RenderClear(renderer);
 
@@ -120,7 +133,6 @@ int main(int argv, char* argc[])
 		{
 			insertEnemies(lstEnemies, renderer, rand() % 600 + 1, rand() % 400 + 1);
 			insertEnemies(lstEnemies, renderer, rand() % 600 + 1, rand() % 400 + 1);
-			std::cout << lstEnemies->size;
 		}
 
 		SDL_Event events;
@@ -129,8 +141,6 @@ int main(int argv, char* argc[])
 		{
 			if (events.type == SDL_QUIT)
 			{
-				std::cout << "timer was FINISHED at: " << time.getTicks();
-				time.Stop();
 				isRunning = false;
 			}
 
@@ -206,7 +216,6 @@ int main(int argv, char* argc[])
 				}
 			}
 		}
-		SDL_Delay(100);
 
 		if (lstEnemies->size > 0)
 		{
@@ -275,11 +284,26 @@ int main(int argv, char* argc[])
 		hero->MOVIMENTS_hero(keystates, renderer, &wallCollider);
 		SDL_RenderCopy(renderer, mato, NULL, NULL);
 
-		//SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		//SDL_RenderDrawRect(renderer, &base);
-		//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
+		////
+		///// HERO TILE COLLIDER
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawRect(renderer, &base);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		/////
+		////
 
 		SDL_RenderPresent(renderer);	
+		countedFrames++;
+
+		///// frame cap
+		int framesTicks = capTimer.getTicks();
+		if (framesTicks < SCREEN_TICKS_PER_FRAME)
+		{
+			SDL_Delay(SCREEN_TICKS_PER_FRAME - framesTicks);
+		}
+		std::cout << avgFrames << "\n";
+		/////	
 	}
 	hero->~Hero();
 	freeAll(lstBullets, lstEnemies);

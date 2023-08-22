@@ -7,8 +7,9 @@ using namespace EnemyClass;
 		this->walkingTimer = Timer();
 		this->enemyVelocity.speedx = 0;
 		this->enemyVelocity.speedy = 0;
-		this->relaxMoviments = rand() % 3 + 1; 
+		this->relaxMoviments = rand() % 4 ; 
 		this->isChasing = false;
+		this->isShooting = false;
 		this->onTheFloor = false;
 		this->posx = posx;
 		this->posy = posy;
@@ -91,6 +92,11 @@ using namespace EnemyClass;
 	void Enemy::setIsChasing(bool isChasing)
 	{
 		this->isChasing = isChasing;
+	}
+
+	void Enemy::setIsShooting(bool isShooting)
+	{
+		this->isShooting = isShooting;
 	}
 
 	void Enemy::initFrames(SDL_Renderer* renderer)
@@ -185,11 +191,11 @@ using namespace EnemyClass;
 		enemyBox.w = (TEXTURE_W / 8) * 2;
 		enemyBox.h = (TEXTURE_H) * 2;
 
-		if(this->directionFace == 1)
+		if(this->directionFace == -1)
 		{
 		SDL_RenderCopyEx(renderer, this->moveEnemy.RUNenemy, &this->moveEnemy.enemyFrames[this->spriteState[1]], &enemyBox, NULL, NULL, SDL_FLIP_HORIZONTAL);
 		}
-		else if(this->directionFace == 2)
+		else if(this->directionFace == 1)
 		{
 			SDL_RenderCopy(renderer, this->moveEnemy.RUNenemy, &this->moveEnemy.enemyFrames[this->spriteState[1]], &enemyBox);
 		}
@@ -266,8 +272,12 @@ using namespace EnemyClass;
 
 	void Enemy::MOVIMENTS_enemy(int heroPosx, int heroPosy, SDL_Renderer* renderer)
 	{
-		if(this->isChasing)
+		this->enemyVelocity.speedy = ENEMY_GRAVITY;
+		this->posy += this->enemyVelocity.speedy;
+
+		if(!this->isShooting && this->isChasing)
 		{
+			this->relaxMoviments = 0;
 			// x axis
 			if (heroPosx < this->posx)
 			{
@@ -276,7 +286,7 @@ using namespace EnemyClass;
 
 				this->posx -= enemyVelocity.speedx;
 				this->posy += this->enemyVelocity.speedy;
-				this->directionFace = 1;
+				this->directionFace = -1;
 				this->RUN_moviment(renderer);
 			}
 			else if (heroPosx > this->posx)
@@ -287,11 +297,11 @@ using namespace EnemyClass;
 				this->posx += enemyVelocity.speedx;
 				this->posy += this->enemyVelocity.speedy;
 
-				this->directionFace = 2;
+				this->directionFace = 1;
 				this->RUN_moviment(renderer);
 			}
 		}
-		else if(!this->isChasing)// 3 seconds
+		else if(!this->isChasing && !this->isShooting)// 3 seconds
 		{
 			if (!this->walkingTimer.checkIsStarted())
 			{
@@ -302,14 +312,14 @@ using namespace EnemyClass;
 
 			if(this->relaxMoviments == 0)
 			{
-				if(timer <= 3.0)
+				if(timer <= 2.0)
 				{
 					this->enemyVelocity.speedx = ENEMY_SPEED;
 					this->enemyVelocity.speedy = ENEMY_GRAVITY;
 
 					this->posx += this->enemyVelocity.speedx;
 					this->posy += this->enemyVelocity.speedy;
-					this->directionFace = 2;
+					this->directionFace = 1;
 					this->RUN_moviment(renderer);
 				}
 				else
@@ -321,7 +331,7 @@ using namespace EnemyClass;
 			}
 			else if (this->relaxMoviments == 1 || this->relaxMoviments == 3)
 			{
-				if(timer <= 3.0)
+				if(timer <= 2.0)
 				{
 					IDLE_moviment(renderer);
 				}
@@ -329,31 +339,36 @@ using namespace EnemyClass;
 				{
 					this->walkingTimer.Stop();
 					this->relaxMoviments++;
+					this->directionFace = -1;
 					this->RUN_moviment(renderer);
 				}
 			}
 			else if (this->relaxMoviments == 2)
 			{
-				if(timer <= 3.0)
+				if(timer <= 2.0)
 				{
 					this->enemyVelocity.speedx = ENEMY_SPEED;
 					this->enemyVelocity.speedy = ENEMY_GRAVITY;
 
 					this->posx -= this->enemyVelocity.speedx;
 					this->posy += this->enemyVelocity.speedy;
-					this->directionFace = 1;
+					this->directionFace = -1;
 					this->RUN_moviment(renderer);
 				}
 				else
 				{
 					this->walkingTimer.Stop();
 					this->relaxMoviments++;
-					this->setDirectionFace(2);
 					IDLE_moviment(renderer);
 
 				}
 			}
 		}
+		else if (this->isShooting)
+		{
+			this->SHOOT_moviment(renderer);
+		}
+
 		if (this->relaxMoviments > 3)
 			this->relaxMoviments = 0;	
 	}

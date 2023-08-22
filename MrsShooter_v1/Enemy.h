@@ -21,14 +21,14 @@ namespace EnemyClass
 
 		//game stats
 		bool isChasing;
+		bool isShooting;
+		bool onTheFloor;
 		int life;
 
 		//sprites logics
 		int relaxMoviments;
 		int directionFace;
 		int spriteState[4];
-		bool isShooting;
-		bool onTheFloor;
 		ENEMYsprites moveEnemy;
 
 		//enemy hit boxes
@@ -73,9 +73,12 @@ namespace EnemyClass
 		void MOVIMENTS_enemy(int heroPosx, int heroPosy, SDL_Renderer* renderer);
 		void ActionArea(SDL_Rect actionArea);
 
-		//enemy is on the floor
+		//enemy is on the floor flag
 		bool getOnTheFloor();
 		void setOnTheFloor(bool onTheFloor);
+
+		//enemy is shooting flag
+		void setIsShooting(bool isShooting);
 	};
 }
 

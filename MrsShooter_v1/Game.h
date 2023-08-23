@@ -9,6 +9,10 @@
 #include<SDL_image.h>
 #include <vector>
 
+#include <string.h>
+#include <fstream>
+#include <sstream>
+
 #include "Lists.h"
 #include "Screen.h"
 #include "collision.h"

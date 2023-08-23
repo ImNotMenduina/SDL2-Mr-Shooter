@@ -31,10 +31,39 @@ int main(int argv, char* argc[])
 	{
 		std::cout << "error: SDL_CreateRenderer()";
 	}
+	std::vector<Tile> chao;
 
 	auto map = new int[40][30];
 
 	auto tile = new SDL_Rect[40][30];
+
+	ifstream inputFile;
+	inputFile.open("maps/gameMap.csv");
+
+	if (inputFile.is_open())
+	{ 
+		int x = 0;
+		int y = 0;
+		string line;
+		
+		while (getline(inputFile, line))
+		{
+			stringstream stream(line);
+			string chunk;
+			x = 0;
+			while (getline(stream, chunk, ','))
+			{
+				 map[x][y] = stoi(chunk);
+				 if (map[x][y] == 57)
+				 {
+					 chao.push_back(Tile(x * 16, y * 16, renderer));
+				 }
+				 x++;
+			}
+			y++;
+		}
+	}
+
 
 	SDL_Rect rect;
 	for (int x = 0; x < 40; x++)
@@ -49,8 +78,8 @@ int main(int argv, char* argc[])
 		}
 	}
 
-	std::vector<Tile> chao;
 
+	/*
 	for (int x = 0; x < 40; x++)
 	{
 		
@@ -77,6 +106,8 @@ int main(int argv, char* argc[])
 			}
 		}
 	}
+	*/
+
 
 	SDL_Rect wallCollider; 
 	wallCollider.x = 0;
@@ -108,6 +139,7 @@ int main(int argv, char* argc[])
 	double avgFrames = 0.0;
 	fpsTimer.Start();
 
+	
 	while(isRunning)
 	{
 		capTimer.Start();
@@ -246,7 +278,7 @@ int main(int argv, char* argc[])
 			{
 				for (int y = 0; y < 30; y++)
 				{
-					if (map[x][y] == 0)
+					if (map[x][y] == 57)
 					{
 						t.UpdateTile(renderer, tile[x][y]);
 					}
@@ -302,7 +334,7 @@ int main(int argv, char* argc[])
 		{
 			SDL_Delay(SCREEN_TICKS_PER_FRAME - framesTicks);
 		}
-		std::cout << avgFrames << "\n";
+		//std::cout << avgFrames << "\n";
 		/////	
 	}
 	hero->~Hero();

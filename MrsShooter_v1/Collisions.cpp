@@ -32,20 +32,28 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 void collisionBulletAgainstEnemy(LISTBullets* listBullets, LISTEnemies* listEnemies)
 {
 	_ONE_BULLET* aux = listBullets->inicio;
+	_ONE_ENEMY* aux2 = listEnemies->inicio;
 
-	while (aux != NULL)
-	{	
-		_ONE_ENEMY* aux2 = listEnemies->inicio;
-		while (aux2 != NULL)
+	if (aux == NULL || aux2 == NULL)
+	{
+		//Do Nothing
+	}
+	else
+	{
+		while (aux != NULL)
 		{
-			if ((aux2->enemy->getLife() > 0) && checkCollision(aux->bullet->getBulletBox(), aux2->enemy->getEnemyBox()))
+			aux2 = listEnemies->inicio;
+			while (aux2 != NULL)
 			{
-				aux2->enemy->setLife(aux2->enemy->getLife() - 10);
-				aux->bullet->setLife(0);
+				if ((aux2->enemy->getLife() > 0) && checkCollision(aux->bullet->getBulletBox(), aux2->enemy->getEnemyBox()))
+				{
+					aux2->enemy->setLife(aux2->enemy->getLife() - 10);
+					aux->bullet->setLife(0);
+				}
+				aux2 = aux2->proximo;
 			}
-			aux2 = aux2->proximo;
+			aux = aux->proximo;
 		}
-		aux = aux->proximo;
 	}
 }
 

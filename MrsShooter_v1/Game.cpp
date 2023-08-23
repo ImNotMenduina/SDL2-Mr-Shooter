@@ -107,16 +107,8 @@ int main(int argv, char* argc[])
 	LISTBullets* lstBullets = createList();
 	LISTEnemies* lstEnemies = createListOfEnemies();
 
-	insertEnemies(lstEnemies, renderer, 400, 100);
-	insertEnemies(lstEnemies, renderer, 500, 100);
-
 	bool isRunning = true;
 	bool keystates[6] = { false };
-
-	//SDL_Texture* background3 = loadTexture(renderer, "maps/nuvens_3.png", NULL, NULL);
-	//SDL_Texture* background2 = loadTexture(renderer, "maps/nuvens_2.png", NULL, NULL);
-	//SDL_Texture* background1 = loadTexture(renderer, "maps/nuvens_1.png", NULL, NULL);
-
 
 	Timer fpsTimer = Timer();
 	Timer capTimer = Timer();
@@ -140,14 +132,9 @@ int main(int argv, char* argc[])
 		//std::cout << avgFrames << "\n";
 		//DEFAULT (IDLE)
 		SDL_RenderClear(renderer);
-
-		//SDL_RenderCopy(renderer, background3, NULL, NULL);
-		//SDL_RenderCopy(renderer, background2, NULL, NULL);
-		//SDL_RenderCopy(renderer, background1, NULL, NULL);
 		
-		if (hero->getLife() > 0 && lstEnemies->size < 3)
+		if (hero->getLife() > 0 && lstEnemies->size < 2)
 		{
-			insertEnemies(lstEnemies, renderer, rand() % 600 + 1, rand() % 400 + 1);
 			insertEnemies(lstEnemies, renderer, rand() % 600 + 1, rand() % 400 + 1);
 		}
 
@@ -233,27 +220,16 @@ int main(int argv, char* argc[])
 			}
 		}
 
-		if (lstEnemies->size > 0)
-		{
-			collisionEnemyTile(lstEnemies, chao);
-			printEnemies(lstEnemies, lstBullets, renderer, hero);
-			freeEnemies(lstEnemies);
-			collisionHeroAgainstEnemy(hero, lstEnemies);
-		}
+		collisionEnemyTile(lstEnemies, chao);
+		printEnemies(lstEnemies, lstBullets, renderer, hero);
+		freeEnemies(lstEnemies);
+		collisionHeroAgainstEnemy(hero, lstEnemies);
 
+		printBullet(lstBullets, renderer);
+		freeBullet(lstBullets);
 		
-		if (lstBullets->size > 0)
-		{
-			printBullet(lstBullets, renderer);
-			freeBullet(lstBullets);
-		}
+		collisionBulletAgainstEnemy(lstBullets, lstEnemies);
 		
-
-		if (lstEnemies->size > 0 && lstBullets->size > 0)
-		{
-			collisionBulletAgainstEnemy(lstBullets, lstEnemies);
-		}
-	
 		collisionHeroTile(chao, hero, renderer);
 
 		vector<Tile>::iterator it;

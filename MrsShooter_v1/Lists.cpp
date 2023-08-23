@@ -59,41 +59,45 @@ void insertBullet(LISTBullets* lst, SDL_Renderer* renderer, int direction, int p
 void freeBullet(LISTBullets* lst)
 {
 	if (lst->inicio == NULL)
-		exit(0);
-
-	_ONE_BULLET* aux = lst->inicio;
-	_ONE_BULLET* check = NULL;
-
-	while (aux != NULL)
 	{
-		check = aux;
-		aux = aux->proximo;
+		//Do Nothing
+	}
+	else
+	{
+		_ONE_BULLET* aux = lst->inicio;
+		_ONE_BULLET* check = NULL;
 
-		if (check->bullet->getLife() < 1)
+		while (aux != NULL)
 		{
-			if (check == lst->inicio)
-			{
-				lst->inicio = aux;
-				lst->size--;
+			check = aux;
+			aux = aux->proximo;
 
-				//std::cout << "FREELOU BEGIN ###1\n";
-			}
-			else if (check->proximo == NULL)
+			if (check->bullet->getLife() < 1)
 			{
-				check->anterior->proximo = NULL;
-				lst->size--;
+				if (check == lst->inicio)
+				{
+					lst->inicio = aux;
+					lst->size--;
 
-				//std::cout << "FREELOU FINAL ###2\n";
-			}
-			else
-			{
-				check->anterior->proximo = check->proximo;
-				check->proximo->anterior = check->anterior;
-				lst->size--;
+					//std::cout << "FREELOU BEGIN ###1\n";
+				}
+				else if (check->proximo == NULL)
+				{
+					check->anterior->proximo = NULL;
+					lst->size--;
 
-				//std::cout << "FREELOU MIDDLE ###3\n";
+					//std::cout << "FREELOU FINAL ###2\n";
+				}
+				else
+				{
+					check->anterior->proximo = check->proximo;
+					check->proximo->anterior = check->anterior;
+					lst->size--;
+
+					//std::cout << "FREELOU MIDDLE ###3\n";
+				}
+				free(check);
 			}
-			free(check);
 		}
 	}
 }
@@ -169,41 +173,46 @@ void insertEnemies(LISTEnemies* lst, SDL_Renderer* renderer, int posx, int posy)
 
 void freeEnemies(LISTEnemies* lst)
 {
-	if (lst == NULL || lst->inicio == NULL) exit(0);
-
-	_ONE_ENEMY* aux = lst->inicio;
-	_ONE_ENEMY* check = NULL;
-
-	while (aux != NULL)
+	if (lst == NULL || lst->inicio == NULL)
 	{
-		check = aux; 
-		aux = aux->proximo;
+		//Do Nothing
+	}
+	else
+	{
+		_ONE_ENEMY* aux = lst->inicio;
+		_ONE_ENEMY* check = NULL;
 
-		if (check->enemy->getLife() < 1)
+		while (aux != NULL)
 		{
-			if (check == lst->inicio)
-			{
-				lst->inicio = check->proximo;
-				lst->size--;
+			check = aux;
+			aux = aux->proximo;
 
-				std::cout << "FREELOU BEGIN ###1\n";
-			}
-			else if (check->proximo == NULL)
+			if (check->enemy->getLife() < 1)
 			{
-				check->anterior->proximo = NULL;
-				lst->size--;
+				if (check == lst->inicio)
+				{
+					lst->inicio = check->proximo;
+					lst->size--;
 
-				std::cout << "FREELOU MIDDLE ###2\n";
-			}
-			else
-			{
-				check->anterior->proximo = check->proximo;
-				check->proximo->anterior = check->anterior;
-				lst->size--;
+					std::cout << "FREELOU BEGIN ###1\n";
+				}
+				else if (check->proximo == NULL)
+				{
+					check->anterior->proximo = NULL;
+					lst->size--;
 
-				std::cout << "FREELOU FINAL ###3\n";
+					std::cout << "FREELOU MIDDLE ###2\n";
+				}
+				else
+				{
+					check->anterior->proximo = check->proximo;
+					check->proximo->anterior = check->anterior;
+					lst->size--;
+
+					std::cout << "FREELOU FINAL ###3\n";
+				}
+				free(check);
 			}
-			free(check);
 		}
 	}
 }
@@ -220,25 +229,25 @@ void printEnemies(LISTEnemies* lst, LISTBullets* bulletsList, SDL_Renderer* rend
 				if(checkCollision(aux->enemy->getActionArea(), hero->getHeroBox()))
 				{
 					aux->enemy->setIsChasing(true);
-					//aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
+					aux->enemy->setIsShooting(false);
 				}
-				
 				else
 				{
 					aux->enemy->setIsChasing(false);
-					aux->enemy->setPositionY(aux->enemy->getPositionY() + ENEMY_GRAVITY);
-					//aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
+					aux->enemy->setIsShooting(false);
 				}
 				aux->enemy->MOVIMENTS_enemy(hero->getPositionX(), hero->getPositionY(), renderer);
 				aux->enemy->ActionArea(aux->enemy->getEnemyBox());
 
 				//ACTION BOX
-				//SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-				//SDL_Rect rect = aux->enemy->getActionArea();
-				//SDL_Rect rect2 = aux->enemy->getActionAreaShoot();
-				//SDL_RenderDrawRect(renderer, &rect);
-				//SDL_RenderDrawRect(renderer, &rect2);
-				//SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+				//
+				//
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+				SDL_Rect rect = aux->enemy->getActionArea();
+				SDL_Rect rect2 = aux->enemy->getActionAreaShoot();
+				SDL_RenderDrawRect(renderer, &rect);
+				SDL_RenderDrawRect(renderer, &rect2);
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 				//
 			}
 			else

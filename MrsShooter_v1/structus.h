@@ -13,14 +13,16 @@ typedef struct
 	SDL_Rect heroFrames[30];
 }HEROsprites;
 
-typedef struct
+ struct enemySprites
 {
 	SDL_Texture* RUNenemy;
 	SDL_Texture* IDLEenemy;
 	SDL_Texture* SHOOTenemy;
 	SDL_Texture* DEADhero;
 	SDL_Rect enemyFrames[17];
-}ENEMYsprites;
+};
+ typedef struct enemySprites ENEMYsprites;
+
 
 typedef struct
 {

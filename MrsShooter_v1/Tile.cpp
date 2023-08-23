@@ -1,22 +1,21 @@
 #include "Tile.h"
 using namespace TileClass;
 
-Tile::Tile(int posx, int posy, SDL_Renderer* renderer)
+int TEXTURE_W, TEXTURE_H;
+
+Tile::Tile(int posy, int posx, int type, SDL_Renderer* renderer)
 {
-	this->posx = posx;
 	this->posy = posy;
-	this->on = false;
+	this->posx = posx;
+	this->type = type;
 	initTile(renderer);
 }
 
 
 void Tile::initTile(SDL_Renderer* renderer)
 {
-	int TEXTURE_W, TEXTURE_H;
-	this->tileTexture = loadTexture(renderer, "maps/tiles_out.png", &TEXTURE_W, &TEXTURE_H);
-
-	if (this->tileTexture == NULL)
-		std::cout << "deu merda";
+	int a, b;
+	this->tileTexture = loadTexture(renderer, "maps/tiles_out.png", &a, &b);
 
 	SDL_Rect  collisor;
 	collisor.x = posx;
@@ -25,23 +24,63 @@ void Tile::initTile(SDL_Renderer* renderer)
 	collisor.h = 16;
 	this->tileBox = collisor;
 
-	SDL_Rect  tilePrint;
-	tilePrint.x = 10 * 16;
-	tilePrint.y = 2 * 16;
-	tilePrint.w = 16;
-	tilePrint.h = 16;
-	this->tilePrint = tilePrint;
-	
+	if(this->type == 59)
+	{
+		SDL_Rect  tilePrint;
+		tilePrint.x = 10 * 16;
+		tilePrint.y = 2 * 16;
+		tilePrint.w = 16;
+		tilePrint.h = 16;
+		this->tilePrint = tilePrint;
+	}
+	else if (this->type == 150)
+	{
+		SDL_Rect  tilePrint;
+		tilePrint.x = 7 * 16;
+		tilePrint.y = 11 * 16;
+		tilePrint.w = 16;
+		tilePrint.h = 16;
+		this->tilePrint = tilePrint;
+	}
+	else if (this->type == 151)
+	{
+		SDL_Rect  tilePrint;
+		tilePrint.x = 8 * 16;
+		tilePrint.y = 11 * 16;
+		tilePrint.w = 16;
+		tilePrint.h = 16;
+		this->tilePrint = tilePrint;
+	}
+	else if (this->type == 163)
+	{
+		SDL_Rect  tilePrint;
+		tilePrint.x = 7 * 16;
+		tilePrint.y = 12 * 16;
+		tilePrint.w = 16;
+		tilePrint.h = 16;
+		this->tilePrint = tilePrint;
+	}
+	else if (this->type == 164)
+	{
+		SDL_Rect  tilePrint;
+		tilePrint.x = 8 * 16;
+		tilePrint.y = 12 * 16;
+		tilePrint.w = 16;
+		tilePrint.h = 16;
+		this->tilePrint = tilePrint;
+	}
 }
 
 void Tile::UpdateTile(SDL_Renderer* renderer, SDL_Rect print)
 {
 	SDL_RenderCopy(renderer, this->tileTexture, &this->tilePrint, &print);
-}
-
-SDL_Texture* Tile::getTileTexture()
-{
-	return this->tileTexture;
+	////
+	///// HERO TILE COLLIDER
+	SDL_SetRenderDrawColor(renderer, 250, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderDrawRect(renderer, &print);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	/////
+	////
 }
 
 SDL_Rect Tile::getTilePrint()
@@ -59,13 +98,12 @@ int Tile::getPosY()
 	return this->posy;
 }
 
-bool Tile::getOn()
+int Tile::getPosX()
 {
-	return this->on;
+	return this->posx;
 }
 
-void Tile::setOn(bool on)
+int Tile::getType()
 {
-	this->on = on;
+	return this->type;
 }
-

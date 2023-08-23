@@ -33,30 +33,60 @@ int main(int argv, char* argc[])
 	}
 	std::vector<Tile> chao;
 
-	auto map = new int[40][30];
+	auto map = new int[30][80];
+	auto tile = new SDL_Rect[30][80];
 
-	auto tile = new SDL_Rect[40][30];
+	SDL_Rect rect;
+	for (int y = 0; y < 30; y++)
+	{
+		for (int x = 0; x < 80; x++)
+		{
+			rect.y = y * 16;
+			rect.x = x * 16;
+			rect.w = 16;
+			rect.h = 16;
+			tile[y][x] = rect;
+		}
+	}
 
 	ifstream inputFile;
-	inputFile.open("maps/gameMap.csv");
+	inputFile.open("maps/mapV0.csv");
+
 
 	if (inputFile.is_open())
 	{ 
+		string line;
 		int x = 0;
 		int y = 0;
-		string line;
-		
+
 		while (getline(inputFile, line))
 		{
 			stringstream stream(line);
 			string chunk;
 			x = 0;
-			while (getline(stream, chunk, ','))
+			while (getline(stream, chunk, ',') && x < 80)
 			{
-				 map[x][y] = stoi(chunk);
-				 if (map[x][y] == 57)
+				map[y][x] = stoi(chunk);
+
+				 if (map[y][x] == 59)
 				 {
-					 chao.push_back(Tile(x * 16, y * 16, renderer));
+					 chao.push_back(Tile(y * 16, x * 16, 59, renderer));
+				 }
+				 else if (map[y][x] == 150)
+				 {
+					 chao.push_back(Tile(y * 16, x * 16, 150, renderer));
+				 }
+				 else if (map[y][x] == 151)
+				 {
+					 chao.push_back(Tile(y * 16, x * 16, 151, renderer));
+				 }
+				 else if (map[y][x] == 163)
+				 {
+					 chao.push_back(Tile(y * 16, x * 16, 163, renderer));
+				 }
+				 else if (map[y][x] == 164)
+				 {
+					 chao.push_back(Tile(y * 16, x * 16, 164, renderer));
 				 }
 				 x++;
 			}
@@ -64,50 +94,7 @@ int main(int argv, char* argc[])
 		}
 	}
 
-
-	SDL_Rect rect;
-	for (int x = 0; x < 40; x++)
-	{
-		for (int y = 0; y < 30; y++)
-		{
-			rect.x = x * 16;
-			rect.y = y * 16;
-			rect.w = 16 ;
-			rect.h = 16 ;
-			tile[x][y] = rect;
-		}
-	}
-
-
-	/*
-	for (int x = 0; x < 40; x++)
-	{
-		
-		for (int y = 0; y < 30; y++)
-		{
-			//int stackHeight = heights[x];
-			//if (y > stackHeight)
-			//{
-			//	map[x][y] = 1;
-			//}
-			if(y == 25) //|| y == stackHeight)
-			{
-				map[x][y] = 0;
-				chao.push_back(Tile(x * 16, y * 16, renderer));			
-			}
-			if(y == 10 && x > 20 ||
-				y == 12 && x == 14 ||
-				 y==20 && x > 20 ||
-					y == 15 && x < 10 ||
-					y == 18 && x == 12)
-			{
-				map[x][y] = 0;
-				chao.push_back(Tile(x * 16, y * 16, renderer));
-			}
-		}
-	}
-	*/
-
+	inputFile.close();
 
 	SDL_Rect wallCollider; 
 	wallCollider.x = 0;
@@ -115,22 +102,21 @@ int main(int argv, char* argc[])
 	wallCollider.w = SCREEN_WIDTH;
 	wallCollider.h = SCREEN_HEIGHT;
 
-	Hero* hero = new Hero(200, 200, renderer);
+	Hero* hero = new Hero(200, 100, renderer);
 
 	LISTBullets* lstBullets = createList();
 	LISTEnemies* lstEnemies = createListOfEnemies();
 
-	insertEnemies(lstEnemies, renderer, 400, 200);
-	insertEnemies(lstEnemies, renderer, 500, 200);
+	insertEnemies(lstEnemies, renderer, 400, 100);
+	insertEnemies(lstEnemies, renderer, 500, 100);
 
 	bool isRunning = true;
 	bool keystates[6] = { false };
 
-	SDL_Texture* background3 = loadTexture(renderer, "maps/nuvens_3.png", NULL, NULL);
-	SDL_Texture* background2 = loadTexture(renderer, "maps/nuvens_2.png", NULL, NULL);
-	SDL_Texture* background1 = loadTexture(renderer, "maps/nuvens_1.png", NULL, NULL);
-	SDL_Texture* background = loadTexture(renderer, "maps/mapback.png", NULL, NULL);
-	SDL_Texture* mato = loadTexture(renderer, "maps/mato.png", NULL, NULL);
+	//SDL_Texture* background3 = loadTexture(renderer, "maps/nuvens_3.png", NULL, NULL);
+	//SDL_Texture* background2 = loadTexture(renderer, "maps/nuvens_2.png", NULL, NULL);
+	//SDL_Texture* background1 = loadTexture(renderer, "maps/nuvens_1.png", NULL, NULL);
+
 
 	Timer fpsTimer = Timer();
 	Timer capTimer = Timer();
@@ -155,11 +141,9 @@ int main(int argv, char* argc[])
 		//DEFAULT (IDLE)
 		SDL_RenderClear(renderer);
 
-		SDL_RenderCopy(renderer, background3, NULL, NULL);
-		SDL_RenderCopy(renderer, background2, NULL, NULL);
-		SDL_RenderCopy(renderer, background1, NULL, NULL);
-		SDL_RenderCopy(renderer, background, NULL, NULL);
-
+		//SDL_RenderCopy(renderer, background3, NULL, NULL);
+		//SDL_RenderCopy(renderer, background2, NULL, NULL);
+		//SDL_RenderCopy(renderer, background1, NULL, NULL);
 		
 		if (hero->getLife() > 0 && lstEnemies->size < 3)
 		{
@@ -270,60 +254,26 @@ int main(int argv, char* argc[])
 			collisionBulletAgainstEnemy(lstBullets, lstEnemies);
 		}
 	
-		
+		collisionHeroTile(chao, hero, renderer);
 
-		for (Tile& t : chao)
-		{
-			for (int x = 0; x < 40; x++)
+		vector<Tile>::iterator it;
+			for (int y = 0; y < 30; y++)
 			{
-				for (int y = 0; y < 30; y++)
+				for (int x = 0; x < 40; x++)
 				{
-					if (map[x][y] == 57)
+					for(it = chao.begin(); it != chao.end(); it++)
 					{
-						t.UpdateTile(renderer, tile[x][y]);
+						if (map[y][x] == it->getType())
+						{
+							it->UpdateTile(renderer, tile[y][x]);
+							break;
+						}
 					}
-
 				}
 			}
-		}
-
-		int i = 0;
-		bool collision = false;
-		SDL_Rect base;
-		base.x = hero->getHeroBox().x;
-		base.y = hero->getHeroBox().y + hero->getHeroBox().h/2 + 5;
-		base.w = hero->getHeroBox().w - 10;
-		base.h = hero->getHeroBox().h / 2 - 5;
-
-		while (i < chao.size() && !checkCollision(chao[i].getTileBox(), base))
-		{
-				i++;
-		}
-
-		if (i < chao.size())
-			collision = true;
-		
-		if (collision)
-		{
-			hero->setPositionY(chao[i].getPosY() + 4 - hero->getHeroBox().h);
-			hero->setOnTheFloor(true);
-		}
-		else
-		{
-			hero->setOnTheFloor(false);
-		}
 
 		hero->MOVIMENTS_hero(keystates, renderer, &wallCollider);
-		SDL_RenderCopy(renderer, mato, NULL, NULL);
-
-
-		////
-		///// HERO TILE COLLIDER
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawRect(renderer, &base);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		/////
-		////
+		//SDL_RenderCopy(renderer, mato, NULL, NULL);
 
 		SDL_RenderPresent(renderer);	
 		countedFrames++;

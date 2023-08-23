@@ -29,6 +29,7 @@ namespace HeroClass
 		int getPositionX();
 		int getPositionY();
 		int getLife();
+		SPEED getSpeed();
 		bool getOnFloor();
 		void setHeroBoxX(int posx);
 		void initFrames(SDL_Renderer* renderer);

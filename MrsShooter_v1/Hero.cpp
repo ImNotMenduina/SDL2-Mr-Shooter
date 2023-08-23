@@ -338,11 +338,19 @@ using namespace HeroClass;
 		this->onTheFloor = onTheFloor;
 	}
 
+	SPEED Hero::getSpeed()
+	{
+		return this->heroVelocity;
+	}
+
 	void Hero::MOVIMENTS_hero(bool* keystates, SDL_Renderer* renderer, SDL_Rect* wall)
 	{
 		if(this->life > 0)
 		{
-			//this->heroVelocity.speedy -= GRAVITY;
+			if (this->onTheFloor)
+			{
+				this->heroVelocity.speedy = 0;
+			}
 
 			if (keystates[3] && keystates[4] && this->onTheFloor)
 			{

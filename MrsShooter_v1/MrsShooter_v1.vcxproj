@@ -95,8 +95,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2-2.28.2\include;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2_image\SDL2_image-2.6.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2-2.28.2\lib\x64;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2_image\SDL2_image-2.6.3\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>S:\SDL_Games\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\include;S:\SDL_Games\SDL2lib\SDL2-2.28.1\include;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2-2.28.2\include;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2_image\SDL2_image-2.6.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>S:\SDL_Games\SDL2lib\SDL2-2.28.1\lib\x64;S:\SDL_Games\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\lib\x64;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2-2.28.2\lib\x64;C:\Users\mynam\Documents\_SDL2\SDL2_SRC\SDL2_image\SDL2_image-2.6.3\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

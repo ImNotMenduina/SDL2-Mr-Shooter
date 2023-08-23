@@ -98,6 +98,43 @@ void collisionEnemyTile(LISTEnemies* lst, std::vector<Tile>& tiles)
 	}
 }
 
+void collisionHeroTile(std::vector<Tile>& tiles, Hero* hero, SDL_Renderer* renderer)
+{
+	int i = 0;
+	bool collision = false;
+	SDL_Rect base;
+	base.x = hero->getHeroBox().x;
+	base.y = hero->getHeroBox().y;
+	base.w = hero->getHeroBox().w;
+	base.h = hero->getHeroBox().h;
+
+	while (i < tiles.size() && !checkCollision(tiles[i].getTileBox(), base))
+	{
+		i++;
+	}
+
+	if (i < tiles.size())
+		collision = true;
+
+	if (collision)
+	{
+		hero->setPositionY(tiles[i].getPosY() - hero->getHeroBox().h + 3);
+		hero->setOnTheFloor(true);
+	}
+	else
+	{
+		hero->setOnTheFloor(false);
+	}
+
+	////
+	///// HERO TILE COLLIDER
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_RenderDrawRect(renderer, &base);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	/////
+	////
+}
+
 //
 //
 //************** IMPORTANTE ***************

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <unordered_map>
 
 int main(int argv, char* argc[])
 {
@@ -31,7 +32,11 @@ int main(int argv, char* argc[])
 	{
 		std::cout << "error: SDL_CreateRenderer()";
 	}
+
+	std::unordered_map<int, Tile> Tiles;
+
 	std::vector<Tile> chao;
+	vector<Tile>::iterator it;
 
 	auto map = new int[30][80];
 	auto tile = new SDL_Rect[30][80];
@@ -71,22 +76,28 @@ int main(int argv, char* argc[])
 				 if (map[y][x] == 59)
 				 {
 					 chao.push_back(Tile(y * 16, x * 16, 59, renderer));
+					 Tiles.insert({ 59, Tile(y * 16, x * 16, 59, renderer) });
 				 }
 				 else if (map[y][x] == 150)
 				 {
 					 chao.push_back(Tile(y * 16, x * 16, 150, renderer));
+					 Tiles.insert({ 150, Tile(y * 16, x * 16, 150, renderer) });
 				 }
 				 else if (map[y][x] == 151)
 				 {
 					 chao.push_back(Tile(y * 16, x * 16, 151, renderer));
+					 Tiles.insert({ 151, Tile(y * 16, x * 16, 151, renderer) });
+
 				 }
 				 else if (map[y][x] == 163)
 				 {
 					 chao.push_back(Tile(y * 16, x * 16, 163, renderer));
+					 Tiles.insert({ 163, Tile(y * 16, x * 16, 163, renderer) });
 				 }
 				 else if (map[y][x] == 164)
 				 {
 					 chao.push_back(Tile(y * 16, x * 16, 164, renderer));
+					 Tiles.insert({ 164, Tile(y * 16, x * 16, 164, renderer) });
 				 }
 				 x++;
 			}
@@ -129,7 +140,6 @@ int main(int argv, char* argc[])
 			avgFrames = 0;
 		}
 
-		//std::cout << avgFrames << "\n";
 		//DEFAULT (IDLE)
 		SDL_RenderClear(renderer);
 		
@@ -183,7 +193,6 @@ int main(int argv, char* argc[])
 					//std::cout << "SPACE";
 					keystates[5] = true;
 				}
-				
 			}
 			if (events.type == SDL_KEYUP)
 			{
@@ -227,29 +236,36 @@ int main(int argv, char* argc[])
 
 		printBullet(lstBullets, renderer);
 		freeBullet(lstBullets);
-		
+
 		collisionBulletAgainstEnemy(lstBullets, lstEnemies);
-		
+
 		collisionHeroTile(chao, hero, renderer);
 
-		vector<Tile>::iterator it;
-			for (int y = 0; y < 30; y++)
+		for (int y = 0; y < 30; y++)
+		{
+			for (int x = 0; x < 80; x++)
 			{
-				for (int x = 0; x < 40; x++)
+				int n = map[y][x];
+
+				if (n > 0)
 				{
-					for(it = chao.begin(); it != chao.end(); it++)
-					{
-						if (map[y][x] == it->getType())
-						{
-							it->UpdateTile(renderer, tile[y][x]);
-							break;
-						}
-					}
+					if (n == 59)
+						Tiles.at(59).UpdateTile(renderer, tile[y][x]);
+					else if (n == 150)
+						Tiles.at(150).UpdateTile(renderer, tile[y][x]);
+					else if (n == 151)
+						Tiles.at(151).UpdateTile(renderer, tile[y][x]);
+					else if (n == 163)
+						Tiles.at(163).UpdateTile(renderer, tile[y][x]);
+					else if (n == 164)
+						Tiles.at(164).UpdateTile(renderer, tile[y][x]);
 				}
 			}
+		}
+
+		std::cout << Tiles.size() << "\n";
 
 		hero->MOVIMENTS_hero(keystates, renderer, &wallCollider);
-		//SDL_RenderCopy(renderer, mato, NULL, NULL);
 
 		SDL_RenderPresent(renderer);	
 		countedFrames++;
@@ -260,7 +276,6 @@ int main(int argv, char* argc[])
 		{
 			SDL_Delay(SCREEN_TICKS_PER_FRAME - framesTicks);
 		}
-		//std::cout << avgFrames << "\n";
 		/////	
 	}
 	hero->~Hero();

@@ -3,6 +3,9 @@
 <h1>Collisions</h1>
 
 <p>Each element has its own collider. I've used SDL_Rect to implement the collision logic in this game. First, I'll explain the hero's collider. There is nothing particularly special about the hero's box collider, but it's essential to understand some of the interactions that colliders produce.</p>
+<div align="center">
+  <img src="https://github.com/ImNotMenduina/SDL2-Mr-Shooter/assets/100011745/6333fb65-fd34-4602-8619-d31a596e1a64">
+</div>
 
 <h2>Hero Collider</h2>
 <p>The hero entity has two types of colliders. The first one is very simple to understand; it's just a rectangle that encompasses all the hero sprites. The second collider is also a rectangle, but it only covers half of the hero. I used this second one to monitor interactions between the hero's feet and the platform tiles.</p>
@@ -13,7 +16,7 @@
 <h2>Enemy Collider</h2>
 <p>The enemy entity has four types of colliders. However, it now employs two distinct types of colliders, with two of them being identical to those of the hero.</p>
 <div align="center">
-  <img src="https://github.com/ImNotMenduina/SDL2-Mr-Shooter/assets/100011745/2139c692-bebf-4b1d-a16b-996d39cf2c85">
+  <img src="https://github.com/ImNotMenduina/SDL2-Mr-Shooter/assets/100011745/6333fb65-fd34-4602-8619-d31a596e1a64">
 </div>
 
 <h3>Enemy Range #1</h3>
